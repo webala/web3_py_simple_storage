@@ -45,7 +45,7 @@ w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
 chain_id = 1337
 my_address = "0x3dBdE3D9b38d09f4b35f51D3CCd63c59326A10a5"
 private_key = os.getenv("PRIVATE_KEY")
-print(private_key)
+
 
 # create the contract in python
 SimpleStorage = w3.eth.contract(abi=abi, bytecode=bytecode)
@@ -68,3 +68,7 @@ transaction = SimpleStorage.constructor().buildTransaction(
 signed_transaction = w3.eth.account.sign_transaction(
     transaction, private_key=private_key
 )
+
+# Send
+transactionHash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+transactionReceipt = w3.eth.wait_for_transaction_receipt(transactionHash) #code stops and waits for transaction to go through
