@@ -70,11 +70,12 @@ signed_transaction = w3.eth.account.sign_transaction(
 )
 
 # Send
+print("Deploying contract ...")
 transactionHash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
 transactionReceipt = w3.eth.wait_for_transaction_receipt(
     transactionHash
 )  # code stops and waits for transaction to go through
-
+print("Deployed!")
 
 # working with the contract -> contract address and contract ABI needed
 
@@ -90,10 +91,14 @@ store_transaction = simple_storage.functions.store(15).buildTransaction(
         + 1,  # This nonce has alredy been used in buiding the contract transaction hence add 1
     }
 )
+
+print("Updating contract ...")
 # txn -> Transaction
-signed_store_txn = w3.eth.account.signTransaction(store_transaction, private_key=private_key)
+signed_store_txn = w3.eth.account.signTransaction(
+    store_transaction, private_key=private_key
+)
 store_txn_hash = w3.eth.send_raw_transaction(signed_store_txn.rawTransaction)
 store_txn_receipt = w3.eth.wait_for_transaction_receipt(store_txn_hash)
+print("Contract updated! Transaction Hash -> {}".format(store_txn_hash))
 
 print(simple_storage.functions.retrieve().call())  # function doesnt make a state change
-
