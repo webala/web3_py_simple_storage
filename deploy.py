@@ -1,8 +1,9 @@
 import json
 import os
-from curses.ascii import SI
 from solcx import compile_standard
 from web3 import Web3
+from web3.middleware import geth_poa_middleware
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -40,10 +41,11 @@ bytecode = compiled_sol["contracts"]["simpleStorage.sol"]["SimpleStorage"]["evm"
 abi = compiled_sol["contracts"]["simpleStorage.sol"]["SimpleStorage"]["abi"]
 
 
-# connect to ganache
-w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
-chain_id = 1337
-my_address = "0x3dBdE3D9b38d09f4b35f51D3CCd63c59326A10a5"
+# connect to rinkeby
+w3 = Web3(Web3.HTTPProvider("https://rinkeby.infura.io/v3/95d21bc14b114e20b157cb5dca85c2a1"))
+w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+chain_id = 4
+my_address = "0xD555577a2a29D418D19804c920D1f2bF727324e0"
 private_key = os.getenv("PRIVATE_KEY")
 
 
